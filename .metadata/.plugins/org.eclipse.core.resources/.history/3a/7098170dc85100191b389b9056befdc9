@@ -1,0 +1,51 @@
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/servletProc")
+public class servletProc extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		System.out.println("doGet");
+		doPost(request, response);
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset = UTF-8");
+		
+		String name = request.getParameter("name");
+		String id = request.getParameter("id");
+		String pw = request.getParameter("pw");
+		String hobby[] = request.getParameterValues("hobby");
+		String major[] = request.getParameterValues("major");
+		String protocol[] = request.getParameterValues("protocol");
+		
+		PrintWriter out = response.getWriter(); //사용자의 웹브라우저에 출력
+		out.println("<html><head><title>서블릿 연습</title></head>");
+		out.println("<body>");
+		out.println("이름 : " + name + "<br>");
+		out.println("아이디 : " + id + "<br>");
+		out.println("비밀번호 : " + pw + "<br>");
+		out.println("취미 : " + Arrays.toString(hobby) + "<br>");
+		out.println("과목 : " + major + "<br>");
+		out.println("프로토콜 : " + protocol + "<br>");
+		out.println("</body>");
+		out.println("</html>");
+	}
+
+}

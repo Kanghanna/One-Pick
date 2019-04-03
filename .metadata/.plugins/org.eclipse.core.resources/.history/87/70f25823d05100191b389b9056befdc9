@@ -1,0 +1,32 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%
+
+	request.setCharacterEncoding("UTF-8");
+	String id = request.getParameter("id");
+	String pw = request.getParameter("pw");
+	
+%>
+
+ID : <%= id %> <br>
+PW : <%= pw %> <br>
+
+<!-- DB작업을 통해 회원 여부 판별 -->
+
+<%
+	if(id.equals("choi")){
+		
+		if(pw.equals("1234")){ %>
+			<jsp:forward page="loginOK.jsp"/>
+<%		//page에 적은 파일로 제어권을 넘김
+		}else{ %>
+			<jsp:forward page="login.jsp"/>
+			
+<% }
+	}else { %>
+		<jsp:forward page="insert.jsp"/>
+		
+	}
+
+%>
