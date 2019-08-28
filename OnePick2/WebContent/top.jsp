@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <head>
-<link rel="stylesheet" type="text/css" href="font.css">
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800|Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <style>
 * {
-	font-family: "돋움", Dotum, notokr-regular !important;
+	font-family: 'Nanum Gothic', sans-serif;
 	text-decoration: none;
 	color: #3592ff;
 }
@@ -82,22 +82,25 @@ p {
 	clip: rect(0, 500px, 250px, 30px);
 }
 
+#ranking-li, #worldcup-li, #twitter-li, #comm_chd {
+	color: white;
+}
+
 </style>
 </head>
 <body>
 	<%
-		String header = application.getRealPath("/image/logo/op_header_bg.png"); ///WEB-INF/lib/
-		String chd_menu1 = application.getRealPath("/image/logo/child_menu_left.png");
-		String chd_menu2 = application.getRealPath("/image/logo/child_menu.png");
+		String header = application.getRealPath("img/logo/op_header_bg.png"); ///WEB-INF/lib/
+		String chd_menu1 = application.getRealPath("img/logo/child_menu_left.png");
+		String chd_menu2 = application.getRealPath("img/logo/child_menu.png");
 	%>
 
 	<a href="ranking3.jsp">
 		<div id="top">
 			<img id="top_logo" src=<%=header%>>
-			<center>
 			<div id="top_menu">
 				<ul>
-					<li><a id="ranking" href="ranking3.jsp">연습생 순위</a></li>
+					<li><a id="ranking-li" href="ranking3.jsp">연습생 순위</a></li>
 					<ul id = "rank_chd">
 						<img id="chd1" src=<%=chd_menu1%>>
 						<img id="chd2" src=<%=chd_menu2%>>
@@ -105,16 +108,16 @@ p {
 						<li id = "week"><a href="rankingProc2.jsp">2주차</a></li>&nbsp;
 						<li id = "week"><a href="rankingProc3.jsp">3주차</a></li>&nbsp;
 					</ul>
-					<li>
+					<li id ="worldcup-li">
 						<p>|</p> <a href="worldcup.jsp">one-pick 월드컵</a>
 					</li>
-					<li>
-						<p>|</p> <a href="event.jsp">이벤트</a>
+					<li id="twitter-li">
+						<p>|</p> <a href="twitter.jsp">twitter 정보</a>
 					</li>
 					<li>
-						<p>|</p> <a href="event.jsp">커뮤니티</a>
+						<p>|</p> <a href="community1.jsp">커뮤니티</a>
 					</li>
-					<ul id = comm_chd">
+					<ul id = "comm_chd">
 						<img id="chd1" src=<%=chd_menu1%>>
 						<img id="chd2" src=<%=chd_menu2%>>
 						<li><a href="board.jsp">김요한</a></li>
@@ -131,7 +134,6 @@ p {
 					</ul>
 				</ul>
 			</div>
-			</center>
 		</div>
 	</a>
 </body>

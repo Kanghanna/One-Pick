@@ -9,11 +9,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <%@ include file="css.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <title>로그인</title>
 <style>
 	* {
@@ -42,7 +42,25 @@
 </head>
 
 <body>
-<c:set var="path" value="${pageContext.request.contextPath}"/>
+
+<form name="form1" action="main.jsp">
+	<div><p>Login</p></div>
+	<table border="1">
+		<tr>
+			<td>아이디</td>
+			<td><input name="userId" id="userId"></td>
+		</tr>
+		<tr>
+			<td>비밀번호</td>
+			<td><input type="password" name="userPw" id="userPw"></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<button type="button" id="btn btn-Login">로그인</button>
+			</td>
+		</tr>
+	</table>
+</form>
 
 <%
 
@@ -63,16 +81,13 @@ try{
     
     stmt = conn.createStatement();
     
-    rs = stmt.executeQuery("SELECT id, pw, nickname FROM LOGIN_ACCOUNT");
+    rs = stmt.executeQuery("SELECT * FROM LOGIN_ACCOUNT");
     
     while(rs.next()) {
-    	String id;
-    	String pw;
-    	String nickname;
     	
-    	id = rs.getString("id");
-    	pw = rs.getString("pw");
-    	nickname = rs.getString("nickname");   
+    	String id = rs.getString("id");
+    	String pw = rs.getString("pw");
+    	String nickname = rs.getString("nickname");
     	
     	%>
     	
@@ -101,8 +116,8 @@ try{
 				alert("로그인 되었습니다.");
 			}
 			
-			//document.form1.action = "${path}/login/loginCheck.do";
-			//document.form1.submit();
+			document.form1.action = "main.jsp";
+			document.form1.submit();
 			
 			
 		});
@@ -150,25 +165,6 @@ try{
         연결에 실패하였습니다.
     <%}
 %>
-
-<form name="form1">
-	<div><p>Login</p></div>
-	<table border="1">
-		<tr>
-			<td>아이디</td>
-			<td><input name="userId" id="userId"></td>
-		</tr>
-		<tr>
-			<td>비밀번호</td>
-			<td><input type="password" name="userPw" id="userPw"></td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center">
-				<button type="button" id="btn btn-Login">로그인</button>
-			</td>
-		</tr>
-	</table>
-</form>
 
 
 </body>

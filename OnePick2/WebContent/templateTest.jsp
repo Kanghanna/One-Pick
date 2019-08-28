@@ -10,6 +10,9 @@
 * {
 	font-family: 'Nanum Gothic', sans-serif;
 }
+#tb-template {
+	margin : 0 auto;
+}
 </style>
 </head>
 <body>
@@ -18,29 +21,25 @@
 	//String uri = request.getRequestURI().toString(); 
 	//String pageName = uri.substring(uri.lastIndexOf("/") + 1, uri.length());
 	//out.println(pageName);
-	
+	out.print(contentPage);
 	%>
 
-	<center>
-		<table width="1500" cellpadding="2" cellspacing="0">
+		<table id="tb-template" width="1500">
 			<tr>
-				<td colspan="2">
-					<jsp:include page="top.jsp" />
-				</td>
-			</tr>
-
-			<tr>
-				<td colspan="2" width="900" valign="top">
-					<jsp:include page=<%=contentPage%> />
+				<td>
+					<jsp:include page="top.jsp"/>
 				</td>
 			</tr>
 			<tr>
-				<td width="900" valign = "bottom" colspan="2">
-					<jsp:include page="bottom.jsp" />
+				<td width="900" valign="top">
+					<jsp:include page=<%=contentPage%>/>
+				</td>
+			</tr>
+			<tr>
+				<td width="900" valign = "bottom">
+					<jsp:include page="bottom.jsp"/>
 				</td>
 			</tr>
 		</table>
-	</center>
-
 </body>
 </html>

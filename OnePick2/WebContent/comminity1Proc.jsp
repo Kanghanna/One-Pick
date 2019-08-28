@@ -1,52 +1,44 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <%@ include file="css.jsp" %>
-<title>Insert title here</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<title>OnePick ê¹€ìš”í•œ ì»¤ë®¤ë‹ˆí‹°</title>
 <style>
-#title {
-	font-size: 20pt;
-	border-bottom: 3px solid #3592ff;
-	padding: 20px 0;
-}
-
-#desc {
-	padding: 20px 0;
-}
-#img {
-	align : center;
-	width : 100%;
-}
-</style>
-<style>
-	#form1 {
-		margin: 0 auto;
+	#title {
+		font-size: 20pt;
+		border-bottom: 3px solid #3592ff;
+		padding: 20px 0;
 	}
 	
+	#desc {
+		padding: 20px 0;
+	}
+	#img-banner {
+		position: relative;
+		left: 300px;
+	}
 	#list {
-		border: 1px solid gray;
+		margin : 0 auto;
+		border-bottom : 1px solid #3592ff;
 	}
 	#cap {
 		font-size: 20pt;
 		font-family: 'BEBAS';
 	}
 </style>
-<script>
-	$(document).ready(function() {
-		$("#btnWrite").click(function() {
-			location.href = "${path}/board/write.do";
-		});
-	});
-	
-	function list(page) {
-		location.href = "${path}/board/list.do?curPage=" + page + "&searchOption=${map.searchOption}&keyword=${map.keyword}";
-	}
-	
-</script>
 </head>
+
+
 <body>
 <%
 
@@ -58,119 +50,129 @@ ResultSet rs = null;
 String driver = "oracle.jdbc.driver.OracleDriver";
 String url = "jdbc:oracle:thin:@localhost:1521:XE";
 
-String num;
 Boolean connect = false;
-	
+
+String bno;
+int board_count;
+String nickname;
+String name;
+String title;
+int view_cnt;
+String date;
+
 try{
     Class.forName(driver);
-    conn=DriverManager.getConnection(url,"PRODUCE_DB","3101"); //ÀÚ½ÅÀÇ ¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£
+    conn=DriverManager.getConnection(url,"PRODUCE_DB","3101"); //ìì‹ ì˜ ì•„ì´ë””ì™€ ë¹„ë°€ë²ˆí˜¸
     connect = true;
     
-    stmt = conn.createStatement();
-    num = (String) request.getAttribute("num");
-    rs = stmt.executeQuery("SELECT * FROM TBL_BLOB WHERE num="+ 1);
     
+    stmt = conn.createStatement();
+    rs = stmt.executeQuery("SELECT num, id, nickname, name, title, view_cnt, TO_CHAR(upload_date, 'YYYY-MM-DD') FROM COMMU_BOARD");
+    
+    String src = "img/commu_image/ê¹€ìš”í•œ.jpg"; //ì‚¬ì§„ íŒŒì¼ ê²½ë¡œ
+	
+    %>
+    <div id = "title">ê¹€ìš”í•œ.com</div>
+    <div id = "desc">ê¹€ìš”í•œ ì—°ìŠµìƒì˜ ê°œì¸ ì»¤ë®¤ë‹ˆí‹°</div>
+    <img id = "img-banner" src=<%=src%>>
+    	
+    	
+    	<!-- ë¡œê·¸ì¸ í–ˆì„ ë•Œë§Œ ê¸€ì“°ê¸° ë²„íŠ¼ ë³´ì´ê¸° -->
+    	<c:if test="${session.getAttribute('id') != null}">
+    		<a href="write.jsp"><input id="btnWrite" type="button" value="ê¸€ì“°ê¸°"></a>
+    	</c:if>
+
+
+    <%--<%=board_count%>ê°œì˜ ê²Œì‹œë¬¼--%>
+
+
+    <!-- ê²Œì‹œíŒ ëª©ë¡ -->
+    <table id="list" width="700px">
+    	<tr>
+    		<th>ê¸€ë²ˆí˜¸</th>
+    		<th>ì—‘ìŠ¤ì›</th>
+    		<th>ê¸€ ì œëª©</th>
+    		<th>ê¸€ì“´ì´</th>
+    		<th>ì‘ì„±ì¼</th>
+    		<th>ì¡°íšŒìˆ˜</th>
+    	</tr>
+    
+    <%
     while(rs.next()) {
     	
-    	String name = rs.getString("name");
-    	String company = rs.getString("company");
-    	String age = rs.getString("age");
+    	bno = rs.getString("num");
+    	//board_count = rs.getInt("3");
+    	nickname = rs.getString("nickname");
+    	name = rs.getString("name");
+    	title = rs.getString("title");
+    	view_cnt = rs.getInt("view_cnt");
+    	date = rs.getString("7");
     	
     	
-    	String src = application.getRealPath("WEB-INF/img/commu_image/" + name + ".jpg"); //»çÁø ÆÄÀÏ °æ·Î
+        	
+
     	%>
-<%
-	String src = application.getRealPath("/WEB-INF/img/commu_image/±è¿äÇÑ.jpg");
-%>
-<div id = "title">±è¿äÇÑ.com</div>
-<div id = "desc">±è¿äÇÑ ¿¬½À»ıÀÇ °³ÀÎ Ä¿¹Â´ÏÆ¼</div>
-<img src = <%=src%>>
-
-<!-- °Ë»ö ±â´É Æû (°Ë»ö¾î¸¦ ³Ö¾î¼­ ¸ñ·Ï¿¡°Ô ³Ñ°Ü¾ßÇÔ) -->
-<form id="form1" name="form1" method="post" action="${path}/board/list.do">
-	<select name="searchOption">
-		<option value="all" <c:out value="${map.searchOption == 'all' ? 'selected' : ''}"/>>
-			Á¦¸ñ + ±Û¾´ÀÌ + ³»¿ë
-		</option>
-		<option value="writer" <c:out value="${map.searchOption == 'writer' ? 'selected' : ''}" />>
-			±Û¾´ÀÌ
-		</option>
-		<option value="content" <c:out value="${map.searchOption == 'content' ? 'selected' : ''}" />>
-			³»¿ë
-		</option>
-		<option value="title" <c:out value="${map.searchOption == 'title' ? 'selected' : ''}" />>
-			Á¦¸ñ
-		</option>
-	</select>
+	<div><%=nickname %></div>
 	
-	<input name="keyword" value="${map.keyword}"> <!-- °Ë»ö Å°¿öµå °ª ÀÛ¼º¶õ -->
-	<input type="submit" value="Á¶È¸">
-	
-	<!-- ·Î±×ÀÎ ÇßÀ» ¶§¸¸ ±Û¾²±â ¹öÆ° º¸ÀÌ±â -->
-	<c:if test="${sessionScope.userId != null}">
-		<input id="btnWrite" type="button" value="±Û¾²±â">
-	</c:if>
-</form>
-
-
-${map.count}°³ÀÇ °Ô½Ã¹°ÀÌ ÀÖ½À´Ï´Ù.
-
-
-<!-- °Ô½ÃÆÇ ¸ñ·Ï -->
-<caption id="cap">NOTICE</caption>
-<table id="list" width="700px">
+	<%
+		//for(int i=0; i < board_count; i++){
+		
+	%>
 	<tr>
-		<th>±Û¹øÈ£</th>
-		<th>±Û Á¦¸ñ</th>
-		<th>±Û¾´ÀÌ</th>
-		<th>ÀÛ¼ºÀÏ</th>
-		<th>Á¶È¸¼ö</th>
-	</tr>
-	
-	<c:forEach var="row" items="${map.list}">
-	<tr>
-		<td>${row.bno}</td>
+		<td><%=bno %></td>
+		<td><%=name %></td>
 		<td>
-			<!--<a href="${path}/board/view.do?bno=${row.bno}">${row.title}</a>-->
-			<a href="${path}/board/view.do?bno=${row.bno}
-			&curPage=${map.boardPager.curPage}&searchOption=
-			${map.searchOption}&keyword=${map.keyword}">${row.title}</a>
-			
-			<c:if test="${row.recnt > 0}">
-				<span style="color:red;">(${row.recnt})</span>
-			</c:if>
+			<a href="view_board.jsp?bno=<%=bno%>"><%=title %></a>
 		</td>
-		
-		<td>${row.writer}</td>
-		<td><fmt:formatDate value="${row.regdate}" pattern="yyyy-MM-dd a HH:mm:ss"/></td>
-		<td>${row.viewcnt}</td>
+		<td><%=nickname %></td>
+		<td><%=view_cnt %></td>
+		<td><%=date %></td>
 	</tr>
-	</c:forEach>
+	<%
+		//}
+	%>
 	
-	<tr>
-		<td colspan="5">
-		<c:if test="${map.boardPager.curBlock > 1}">
-			<a href="javascript:list('1')">[Ã³À½]</a>
-		</c:if>
-		
-		<c:forEach var="num" begin="${map.boardPager.blockBegin}" end="${map.boardPager.blockEnd}">
-			<c:choose>
-				<c:when test="${num==map.boardPager.curPage}">
-					<span style="color:red">${num}</span> <!-- »ö»óº¯°æ -->
-				</c:when>
-				
-				<c:otherwise>
-					<a href="javascript:list('${num}')"> | ${num} | </a>&nbsp;
-				</c:otherwise>
-			</c:choose>
-		</c:forEach>
-		
-		<!-- ³¡ ÆäÀÌÁö -->
-		<c:if test="${map.boardPager.curPage <= map.boardPager.totPage}">
-			<a href="javascript:list('5')"> [³¡] </a>
-		</c:if>
-		</td>
-	</tr>
+
+<%
+    	
+    } //while
+    
+    
+    }catch(Exception e){
+        connect = false;
+        e.printStackTrace();
+    } finally {
+    	if (rs != null) { 
+    		try { 
+    			rs.close(); 
+    		} catch (SQLException e) {
+    			e.printStackTrace(); 
+    		} 
+    	} 
+    	
+    	if (stmt != null) {
+    		try { 
+    			stmt.close(); 
+    		} catch (SQLException e) {
+    			e.printStackTrace(); 
+    			} 
+    	} 
+    	
+    	if (conn != null) {
+    		try { 
+    			conn.close(); 
+    		} catch (SQLException e) {
+    			e.printStackTrace(); 
+    		} 
+    	}
+    }
+
+    if(connect==true){%>
+    <%}else{ %>
+        ì—°ê²°ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.
+    <%}
+%>
+
 </table>
 </body>
 </html>
