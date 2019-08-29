@@ -10,13 +10,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800|Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <%@ include file="css.jsp" %>
 <title>One-Pic 1주차 순위</title>
 
 <style>
 
 * {
-	margin: 0;
+	font-family: 'Nanum Gothic', sans-serif;
+	margin: 0 auto;
 	padding: 0;
 }
 
@@ -43,6 +45,7 @@ div[id^="tag-"] img {
 	top : 120px;
 	left : 720px;
 	clip: rect(0, 50px, 50px, 0);
+	
 }
 
 /* top bottom 빼고 모두 변경*/
@@ -50,6 +53,7 @@ div[id^="tag-"] img {
 	top : 300px;
 	left : 580px;
 	clip: rect(60px, 25px, 90px, 0);
+	z-index: 1;
 }
 
 #tag-3 img {
@@ -106,6 +110,7 @@ div[id^="tag-"] img {
 	margin: 0 auto;
 	width: 250px;
 	height: 250px;
+	z-index: 1;
 }
 #2-10 {
 	
@@ -114,7 +119,6 @@ div[id^="tag-"] img {
 #company { font-size: 15px; }
 
 #photo {
-	positon: absolute;
 	width: 150px;
 	height: 150px;
 	top: 0;
@@ -122,19 +126,16 @@ div[id^="tag-"] img {
 }
 
 #2 #photo {
-	positon: absolute;
 	top : 300px;
 	left : 580px;
 }
 
 #3 #photo {
-	positon: absolute;
 	top: 300px;
 	left: 600px;
 }
 
 #11-101 {
-	position: relative;
 	display : inline;
 	border-bottom : 2px solid #3592ff;
 }
@@ -143,6 +144,7 @@ div[id $= "th"] img {
 	position: absolute;
 	margin : 0 60px;
 	clip: rect(0, 640px, 35px, 0);
+	display: inline;
 }
 /*
 #11-30th img {
@@ -151,8 +153,7 @@ div[id $= "th"] img {
 
 #31-50th img {
 position: absolute;
-margin : 20px;
-	clip: rect(50px, 640px, 85px, 0);
+	clip: rect(50px, 640px, 85px, 0); 
 }
 
 #51-70th img {
@@ -170,14 +171,17 @@ position: absolute;
 	clip: rect(0, 640px, 35px, 0);
 }
 
-#mask_base {
+
+img #mask_base {
 	position: absolute;
-	width: 200px;
-	height: 200px;
+	
+	width: 150px;
+	/*
 	top: 0;
 	left: 0;
 	background-color: white;
 	clip: rect(0, 0, 65px, 65px);
+	*/
 }
 
 #rank_num {
@@ -234,7 +238,9 @@ String driver = "oracle.jdbc.driver.OracleDriver";
 String url = "jdbc:oracle:thin:@localhost:1521:XE";
 	
 Boolean connect = false;
-	
+
+String what_week = (String) request.getAttribute("week");
+out.println(what_week);
 try{
     Class.forName(driver);
     conn=DriverManager.getConnection(url,"PRODUCE_DB","3101"); //자신의 아이디와 비밀번호
@@ -242,18 +248,18 @@ try{
     
     stmt = conn.createStatement();
     
-    rs = stmt.executeQuery("SELECT num, name, company, one_week FROM PRODUCE_INFO ORDER BY one_week");
+    rs = stmt.executeQuery("SELECT num, name, company, "+ what_week + " FROM PRODUCE_INFO ORDER BY " + what_week);
     
     while(rs.next()) {
     	String num;
     	String name;
     	String company;
-    	String one_week;
+    	String week;
     	
     	num = rs.getString("num");
     	name = rs.getString("name");
     	company = rs.getString("company");   
-    	one_week = rs.getString("one_week");
+    	week = rs.getString("4");
 
 			int cnt = 0;
 			int wh_cnt = 0;
@@ -263,12 +269,12 @@ try{
 					//String[] arr = str.split("-"); //arr[0] = 순위 / arr[1] = 연습생 이름
 							
 					String src = "img/practice_people/" + name + ".jpg"; //사진 파일 경로
-					String tag_file = application.getRealPath("WEB-INF/img/logo/tag_ranking.png"); //1~10등까지 이미지
-					String clip_mask = application.getRealPath("WEB-INF/img/logo/rank_mask65.png"); //클리핑 마스크
-					String r_title = application.getRealPath("WEB-INF/img/logo/r_title.png"); //등수 자르는 타이틀
+					String tag_file = "img/logo/tag_ranking.png"; //1~10등까지 이미지
+					String clip_mask = "img/logo/rank_mask65.png"; //클리핑 마스크
+					String r_title = "img/logo/r_title.png"; //등수 자르는 타이틀
 					String tag_src = "tag-" + cnt;
 					
-					if (Integer.parseInt(one_week) == 1) { // WEB-INF/img/practice_people/김민규 tag-1
+					if (Integer.parseInt(week) == 1) { // WEB-INF/img/practice_people/김민규 tag-1
 		%>
 		
 		<center>
@@ -284,13 +290,13 @@ try{
 			</div>
 		</center>
 		<%
-			} else if (Integer.parseInt(one_week) <= 10) { //2~10등까지
+			} else if (Integer.parseInt(week) <= 10) { //2~10등까지
 		%>
 		<div id="2-10">
 			<div id=<%=tag_src%>>
 				<img src=<%=tag_file%>>
 			</div>
-			<div id=<%=one_week%>>
+			<div id=<%=week%>>
 				<img id="mask_base" src=<%=clip_mask%>> 
 				<a href="produce_info.jsp?num=<%=num %>">
 					<img id="photo" src=<%=src%>>
@@ -305,10 +311,10 @@ try{
 			} else {
 		%>
 		<%
-			if (Integer.parseInt(one_week) >= 11 && Integer.parseInt(one_week) % 2 == 0) {
+			if (Integer.parseInt(week) >= 11 && Integer.parseInt(week) % 2 == 0) {
 
-				if (Integer.parseInt(one_week) == 48) { //울림 김민서 일 때
-					src = application.getRealPath("WEB-INF/img/practice_people/" + name + "2.jpg");
+				if (Integer.parseInt(week) == 48) { //울림 김민서 일 때
+					src = application.getRealPath("img/practice_people/" + name + "2.jpg");
 				}
 		%>
 				<div id="11-101" width = "45%" float = "left" display = "inline">
@@ -317,11 +323,12 @@ try{
 						<img id="photo" src=<%=src%> width="100px" height="100px">
 					</a>
 					<div id="info">
-						<b id="rank_num"><%=one_week%></b>&nbsp;&nbsp;&nbsp;<b><%=name%></b>
+						<b id="rank_num"><%=week%></b>&nbsp;&nbsp;&nbsp;<b><%=name%></b>
+						<p id="company"><%=company %></p>
 					</div>
 				</div>
 			<%
-				} else if (Integer.parseInt(one_week) % 2 != 0) {
+				} else if (Integer.parseInt(week) % 2 != 0) {
 			%>
 					<div id="11-101" width = "45%" float = "right" display = "inline">
 						<img id="mask_base" src=<%=clip_mask%> width="100px" height="100px"> 
@@ -329,7 +336,7 @@ try{
 							<img id="photo" src=<%=src%> width="100px" height="100px">
 						</a>
 						<div id="info">
-							<p id="rank_num"><%=one_week%>&nbsp;&nbsp;&nbsp;<b><%=name%></b></p>
+							<b id="rank_num"><%=week%></b>&nbsp;&nbsp;&nbsp;<b><%=name%></b>
 							<p id="company"><%=company %></p>
 						</div>
 					</div>
@@ -338,31 +345,31 @@ try{
 
 					}
 
-					if (Integer.parseInt(one_week) == 10) {
+					if (Integer.parseInt(week) == 10) {
 				%>
 				<div id="11-30th" display = "block">
 					<img src=<%=r_title%>>
 				</div>
 				<%
-					} else if (Integer.parseInt(one_week) == 30) {
+					} else if (Integer.parseInt(week) == 30) {
 				%>
 				<div id="31-50th" display = "block">
 					<img src=<%=r_title%>>
 				</div>
 				<%
-					} else if (Integer.parseInt(one_week) == 50) {
+					} else if (Integer.parseInt(week) == 50) {
 				%>
 				<div id="51-70th" display = "block">
 					<img src=<%=r_title%>>
 				</div>
 				<%
-					} else if (Integer.parseInt(one_week) == 70) {
+					} else if (Integer.parseInt(week) == 70) {
 				%>
 				<div id="71-90th" display = "block">
 					<img src=<%=r_title%>>
 				</div>
 				<%
-					} else if (Integer.parseInt(one_week) == 90) {
+					} else if (Integer.parseInt(week) == 90) {
 				%>
 				<div id="91-101th" display = "block">
 					<img src=<%=r_title%>>

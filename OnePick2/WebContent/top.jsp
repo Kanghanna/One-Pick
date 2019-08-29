@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <head>
+<%@ include file="css.jsp" %>
 <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800|Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
 * {
 	font-family: 'Nanum Gothic', sans-serif;
 	text-decoration: none;
-	color: #3592ff;
 }
 
 #rank_chd, #rank_chd #chd1, #rank_chd #chd2, #comm_chd #chd1, #comm_chd #chd2 {
@@ -44,15 +45,14 @@
 
 p {
 	display: inline-block;
-	color: white;
 	padding: 30px;
 }
 
 #top {
 	width: 100%;
 	height: 300px;
-	color: black;
 	text-decoration: none;
+	margin: 0 auto;
 }
 
 #top_menu {
@@ -73,7 +73,6 @@ p {
 
 #top_menu li, #top_menu li p {
 	display: inline-block;
-	color: white;
 }
 
 #top_logo {
@@ -82,58 +81,98 @@ p {
 	clip: rect(0, 500px, 250px, 30px);
 }
 
-#ranking-li, #worldcup-li, #twitter-li, #comm_chd {
+#login_link, #logup_link, #logout_link {
+	position: absolute;
+	width: 100px;
+	top: 30px;
+	left: 1340px;
+	display: block;
 	color: white;
+	z-index: 1;
 }
+
+#logup_link { left : 1400px;}
+#logout_link { left: 1320px;}
+
+#navbar {
+	color: #0064DC !important;
+	text-align: center;
+}
+
+#navbar li { 
+	margin-right : 40px;
+	border-top: 0 transant !important;
+}
+
+#top > #navbar-nav { align: center; }
+
 
 </style>
 </head>
 <body>
 	<%
-		String header = application.getRealPath("img/logo/op_header_bg.png"); ///WEB-INF/lib/
-		String chd_menu1 = application.getRealPath("img/logo/child_menu_left.png");
-		String chd_menu2 = application.getRealPath("img/logo/child_menu.png");
+		String header = "img/logo/op_header_bg.png"; ///WEB-INF/lib/
+		String chd_menu1 = "img/logo/child_menu_left.png";
+		String chd_menu2 = "img/logo/child_menu.png";
 	%>
 
-	<a href="ranking3.jsp">
 		<div id="top">
-			<img id="top_logo" src=<%=header%>>
-			<div id="top_menu">
-				<ul>
-					<li><a id="ranking-li" href="ranking3.jsp">연습생 순위</a></li>
-					<ul id = "rank_chd">
-						<img id="chd1" src=<%=chd_menu1%>>
-						<img id="chd2" src=<%=chd_menu2%>>
-						<li id = "week"><a href="rankingProc1.jsp">1주차</a></li>&nbsp;
-						<li id = "week"><a href="rankingProc2.jsp">2주차</a></li>&nbsp;
-						<li id = "week"><a href="rankingProc3.jsp">3주차</a></li>&nbsp;
-					</ul>
-					<li id ="worldcup-li">
-						<p>|</p> <a href="worldcup.jsp">one-pick 월드컵</a>
-					</li>
-					<li id="twitter-li">
-						<p>|</p> <a href="twitter.jsp">twitter 정보</a>
-					</li>
-					<li>
-						<p>|</p> <a href="community1.jsp">커뮤니티</a>
-					</li>
-					<ul id = "comm_chd">
-						<img id="chd1" src=<%=chd_menu1%>>
-						<img id="chd2" src=<%=chd_menu2%>>
-						<li><a href="board.jsp">김요한</a></li>
-						<li><a href="board.jsp">김민규</a></li>
-						<li><a href="board.jsp">이은상</a></li>
-						<li><a href="board.jsp">송형준</a></li>
-						<li><a href="board.jsp">남도현</a></li>
-						<li><a href="board.jsp">김우석</a></li>
-						<li><a href="board.jsp">손동표</a></li>
-						<li><a href="board.jsp">송유빈</a></li>
-						<li><a href="board.jsp">구정모</a></li>
-						<li><a href="board.jsp">박선호</a></li>
-						<li><a href="board.jsp">차준호</a></li>
-					</ul>
-				</ul>
-			</div>
+			<a href="main.jsp"><img id="top_logo" src=<%=header%>></a>
+			<c:choose>
+				<c:when test="${application.getAttribute('id')==null}"><a id="login_link" href="login.jsp">로그인</a></c:when>
+				<c:when test="${application.getAttribute('id')!=null}"><a id="logout_link" href="logout.jsp">로그아웃</a></c:when>
+			</c:choose>
+			<a id="logup_link" href="logup.jsp">회원가입</a>
+				<nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown">
+				    	<span class="navbar-toggler-icon"></span>
+				  	</button>
+				  	
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+					    <ul class="navbar-nav">
+					    
+					      <li class="nav-item dropdown">
+					        <button class="btn nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					         	 연습생 순위
+					        </button>
+					        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					          	<a class="dropdown-item" href="/ranking1.jsp?week=one_week">1주차</a>
+						    	<a class="dropdown-item" href="/ranking1.jsp?week=two_week">2주차</a>
+						    	<a class="dropdown-item" href="/ranking1.jsp?week=three_week">3주차</a>
+						    	<a class="dropdown-item" href="/ranking1.jsp?week=five_week">5주차</a>
+						    	<a class="dropdown-item" href="/ranking1.jsp?week=eight_week">8주차</a>
+						    	<a class="dropdown-item" href="/ranking1.jsp?week=eleven_week">11주차</a>
+						    	<a class="dropdown-item" href="/ranking1.jsp?week=final_week">Final</a>
+					        </div>
+					      </li>
+					      
+					      <li class="nav-item">
+					        <a class="nav-link" href="worldcup.jsp">one-pick 월드컵</a>
+					      </li>
+					      <li class="nav-item">
+					        <a class="nav-link" href="twitter.jsp">twitter 정보</a>
+					      </li>
+					      
+					      <li class="nav-item dropdown">
+					        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					         	 커뮤니티
+					        </a>
+					        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+					        	<a class="dropdown-item" href="board.jsp?rq_name=김요한">김요한</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=김우석">김우석</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=한승우">한승우</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=송형준">송형준</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=조승연">조승연</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=손동표">손동표</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=이한결">이한결</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=남도현">남도현</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=차준호">차준호</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=강민희">강민희</a>
+								<a class="dropdown-item" href="board.jsp?rq_name=이은상">이은상</a>
+					        </div>
+					      </li>
+					    </ul>
+					 </div>
+				</nav>
 		</div>
-	</a>
 </body>

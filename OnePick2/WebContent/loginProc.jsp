@@ -4,62 +4,62 @@
 <%@page import="java.sql.Statement"%>
 <%@page import="java.sql.DriverManager"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    
+    pageEncoding="UTF-8"%>  
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800|Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <%@ include file="css.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <title>로그인</title>
 <style>
 	* {
 		margin: 0 auto;
+		font-family: 'Nanum Gothic', sans-serif;
 	}
-	div  { 
+	#login_form  { 
 		display: block;
-		font-family: 'BEBAS';
-		font-size: 40pt;
+		font-size: 20pt;
 		left: 300px;
-		position: absolute;
+		line-height: 50px;
+		width: 300px;
+		padding: 30px;
 	}
-	div p {
-		font-family: 'BEBAS';
-		font-size: 40pt;
+	.form-group {
+		font-size: 15pt;
 	}
-	form { line-height: 50px; }
+	#form-div {
+		border-radius: 5px;
+		
+	}
+	#form-control {
+		width: 50px;
+	}
 	input{
 		width:200px;
 		height: 50px;
 	}
-	#btn btn-Login {
-		background-color: #0080FF;
+	.btnLogin {
+		background-color: #0080FF !important;
 	}
 </style>
 </head>
 
 <body>
 
-<form name="form1" action="main.jsp">
-	<div><p>Login</p></div>
-	<table border="1">
-		<tr>
-			<td>아이디</td>
-			<td><input name="userId" id="userId"></td>
-		</tr>
-		<tr>
-			<td>비밀번호</td>
-			<td><input type="password" name="userPw" id="userPw"></td>
-		</tr>
-		<tr>
-			<td colspan="2" align="center">
-				<button type="button" id="btn btn-Login">로그인</button>
-			</td>
-		</tr>
-	</table>
+<form id="login_form" name="form1" method="post" action="main.jsp">
+<label id="login_label">로그인</label>
+	<div id="form-div">
+	  <div class="form-group">
+	    아이디<input type="text" class="form-control short" id="userId" placeholder="Id" maxlength="20">
+	  </div>
+	  <div class="form-group">
+	    비밀번호<input type="password" class="form-control short" id="userPw" placeholder="Password" maxlength="20">
+	  </div>
+	  <button type="submit" class="btn btn-primary">로그인</button>
+ 	</div>
 </form>
 
 <%
@@ -93,7 +93,7 @@ try{
     	
 <script>
 	$(document).ready(function() {
-		$("#btnLogin").click(function() {
+		$("btnLogin").onclick(function() {
 			var userId = $("#userId").val();
 			var userPw = $("#userPw").val();
 			
@@ -109,11 +109,11 @@ try{
 			}
 			if(userId == id && userPw == pw){
 				<%
-					session.setAttribute("id", id); 
-					session.setAttribute("pw", pw);
-					session.setAttribute("nick", nickname);
+					application.setAttribute("id", id); 
+					application.setAttribute("pw", pw);
+					application.setAttribute("nick", nickname);
 				%>
-				alert("로그인 되었습니다.");
+				
 			}
 			
 			document.form1.action = "main.jsp";
@@ -160,9 +160,8 @@ try{
     }
 
     if(connect==true){%>
-        연결되었습니다.
     <%}else{ %>
-        연결에 실패하였습니다.
+        연결에 실패하였습니다.(loginProc)
     <%}
 %>
 

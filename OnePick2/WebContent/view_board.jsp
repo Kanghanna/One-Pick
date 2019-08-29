@@ -36,7 +36,7 @@
 		});
 		
 		$("#btnList").click(function() {
-			location.href="${path}/board/list.do?";
+			location.href="community1Proc.jsp";
 			history.back();
 		});
 		

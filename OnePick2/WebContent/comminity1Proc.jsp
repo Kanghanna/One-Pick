@@ -59,7 +59,7 @@ String name;
 String title;
 int view_cnt;
 String date;
-
+String rq_name = (String) request.getAttribute("rq_name");
 try{
     Class.forName(driver);
     conn=DriverManager.getConnection(url,"PRODUCE_DB","3101"); //자신의 아이디와 비밀번호
@@ -67,15 +67,12 @@ try{
     
     
     stmt = conn.createStatement();
-    rs = stmt.executeQuery("SELECT num, id, nickname, name, title, view_cnt, TO_CHAR(upload_date, 'YYYY-MM-DD') FROM COMMU_BOARD");
-    
-    String src = "img/commu_image/김요한.jpg"; //사진 파일 경로
+    rs = stmt.executeQuery("SELECT num, id, nickname, name, title, view_cnt, TO_CHAR(upload_date, 'YYYY-MM-DD') FROM COMMU_BOARD WHERE name=" + rq_name);
 	
     %>
     <div id = "title">김요한.com</div>
     <div id = "desc">김요한 연습생의 개인 커뮤니티</div>
-    <img id = "img-banner" src=<%=src%>>
-    	
+    <img id = "img-banner">
     	
     	<!-- 로그인 했을 때만 글쓰기 버튼 보이기 -->
     	<c:if test="${session.getAttribute('id') != null}">
@@ -108,11 +105,13 @@ try{
     	view_cnt = rs.getInt("view_cnt");
     	date = rs.getString("7");
     	
-    	
+    	String src = "img/commu_image/" + name + ".jpg"; //사진 파일 경로
         	
 
     	%>
-	<div><%=nickname %></div>
+    	 <script>
+    		$("#img-banner").attr("src", <%=src%>);
+    	</script>
 	
 	<%
 		//for(int i=0; i < board_count; i++){
